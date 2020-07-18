@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broken Seeds</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+  </head>
+
+  <body>
+    <article>
+      <h1>Loading...</h1>
+      <p>Repeats every <strong class="every">???</strong> blocks on the <strong class="axis">???</strong> axis.</p>
+    </article>
+    <button onclick="newSeed()">New Seed</button>
+    <script>
+      const worker = new Worker('./worker.js')
+      
+        function newSeed() {
+          document.querySelector('button').disabled = true
+          worker.postMessage('')
+        }
+      newSeed()
+      worker.onmessage = ({data: { seed, repeats: { every, axis } }}) => {
+        document.querySelector('button').disabled = false
+        const article = document.querySelector('article')
+        article.querySelector('.every').innerText = every
+        article.querySelector('.axis').innerText = axis
+        article.querySelector('h1').innerText = seed
+      }
+    </script>
+  </body>
+
+</html>
